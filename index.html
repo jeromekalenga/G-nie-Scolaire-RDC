@@ -213,10 +213,14 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
 </section>
 <h2 class="section-title">Les espaces éducatifs</h2>
 <section class="grid">
- <article class="tile">
+ <article class="tile" id="games">
   <span>🎮</span>
   <h3>Jeux éducatifs</h3>
-  <p>Apprendre en jouant.</p>
+  <p>Apprendre en jouant et tester ses connaissances.</p>
+  <button class="primary" type="button"
+    onclick="document.getElementById('gameZone').hidden=false">
+    Accéder aux jeux
+  </button>
  </article>
  <article class="tile">
   <span>📚</span>
@@ -259,10 +263,181 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
  Version de démarrage : le profil sera enregistré sur cet appareil.
  Les comptes en ligne et la synchronisation seront ajoutés ultérieurement.
 </p>
+ <section class="panel" id="gameZone" hidden>
+  <h2 class="section-title">🎮 Jeux éducatifs</h2>
+  <p>Choisis ton espace de jeu pour commencer.</p>
+  <div class="grid">
+    <article class="tile">
+      <h3>🇨🇩 Culture générale RDC</h3>
+      <p>Découvre l'histoire, la géographie et les institutions de la RDC.</p>
+      <button class="primary" type="button"
+        onclick="startGame('rdc')">Jouer</button>
+    </article>
+    <article class="tile">
+      <h3>🧮 Mathématiques</h3>
+      <p>Développe ton raisonnement et tes capacités de calcul.</p>
+      <button class="primary" type="button"
+        onclick="startGame('math')">Jouer</button>
+    </article>
+    <article class="tile">
+      <h3>📖 Français</h3>
+      <p>Améliore ton vocabulaire et ta compréhension.</p>
+      <button class="primary" type="button"
+        onclick="startGame('french')">Jouer</button>
+    </article>
+  </div>
+  <div id="quizArea"></div>
+ </section>
 </main>
 <footer>
  © GÉNIE SCOLAIRE RDC — Une plateforme éducative pour tous les apprenants congolais.
  </footer>
+ const gameQuestions = {
+  rdc: [
+    {
+      q: "Quelle est la capitale de la République démocratique du Congo ?",
+      options: ["Lubumbashi", "Kinshasa", "Goma", "Mbandaka"],
+      answer: 1,
+      explanation: "Kinshasa est la capitale de la RDC."
+    },
+    {
+      q: "Quelle est la monnaie officielle de la RDC ?",
+      options: ["Le dollar", "Le franc CFA", "Le franc congolais", "L'euro"],
+      answer: 2,
+      explanation: "La monnaie officielle est le franc congolais."
+    },
+    {
+      q: "Quel grand fleuve traverse la RDC ?",
+      options: ["Le Nil", "Le fleuve Congo", "Le Niger", "Le Zambèze"],
+      answer: 1,
+      explanation: "Le fleuve Congo est l'un des grands fleuves d'Afrique."
+    }
+  ],
+
+  math: [
+    {
+      q: "Combien font 25 + 17 ?",
+      options: ["32", "42", "45", "52"],
+      answer: 1,
+      explanation: "25 + 17 = 42."
+    },
+    {
+      q: "Combien font 9 × 8 ?",
+      options: ["63", "72", "81", "64"],
+      answer: 1,
+      explanation: "9 multiplié par 8 donne 72."
+    },
+    {
+      q: "Combien font 100 − 35 ?",
+      options: ["55", "65", "75", "85"],
+      answer: 1,
+      explanation: "100 − 35 = 65."
+    }
+  ],
+
+  french: [
+    {
+      q: "Quel est le pluriel de « cheval » ?",
+      options: ["Chevals", "Chevaux", "Chevaus", "Chevales"],
+      answer: 1,
+      explanation: "Le pluriel de cheval est chevaux."
+    },
+    {
+      q: "Quel mot est un verbe ?",
+      options: ["Maison", "Courir", "Beau", "Table"],
+      answer: 1,
+      explanation: "Courir est un verbe à l'infinitif."
+    },
+    {
+      q: "Quel est le contraire de « difficile » ?",
+      options: ["Compliqué", "Dur", "Facile", "Long"],
+      answer: 2,
+      explanation: "Le contraire de difficile est facile."
+    }
+  ]
+};
+let currentQuestions = [];
+let currentQuestion = 0;
+let gameScore = 0;
+let gameFinished = false;
+function startGame(category) {
+  currentQuestions = gameQuestions[category] || [];
+  currentQuestion = 0;
+  gameScore = 0;
+  gameFinished = false;
+  document.getElementById("gameZone").hidden = false;
+  showQuestion();
+  document.getElementById("gameZone").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+function showQuestion() {
+  const area = document.getElementById("quizArea");
+  if (currentQuestion >= currentQuestions.length) {
+    gameFinished = true;
+    area.innerHTML = `
+      <div class="tile">
+        <h3>🏆 Partie terminée !</h3>
+        <p>Ton score : ${gameScore} / ${currentQuestions.length}</p>
+        <p>${gameScore === currentQuestions.length
+          ? "Excellent travail ! Toutes les réponses sont correctes."
+          : "Continue à apprendre et essaie encore !"}
+        </p>
+        <button class="primary" onclick="startGame(
+          document.getElementById('quizArea').dataset.category
+        )">Recommencer</button>
+      </div>
+    `;
+    return;
+  }
+  const item = currentQuestions[currentQuestion];
+  area.dataset.category =
+    Object.keys(gameQuestions).find(key =>
+      gameQuestions[key] === currentQuestions
+    ) || "rdc";
+  area.innerHTML = `
+    <div class="tile">
+      <p>Question ${currentQuestion + 1} sur ${currentQuestions.length}</p>
+      <h3>${item.q}</h3>
+      <div id="answerOptions"></div>
+      <p id="answerFeedback" aria-live="polite"></p>
+      <button class="primary" id="nextQuestion" hidden>
+        Question suivante
+      </button>
+    </div>`;
+  const options = document.getElementById("answerOptions");
+  item.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.className = "primary";
+    button.style.display = "block";
+    button.style.width = "100%";
+    button.style.margin = "8px 0";
+    button.textContent = option;
+    button.addEventListener("click", () => {
+      checkAnswer(index);
+    });
+    options.appendChild(button);
+  });
+}
+function checkAnswer(selected) {
+  const item = currentQuestions[currentQuestion];
+  const buttons = document.querySelectorAll("#answerOptions button");
+  const feedback = document.getElementById("answerFeedback");
+  buttons.forEach(button => button.disabled = true);
+  if (selected === item.answer) {
+    gameScore++;
+    feedback.textContent = "✅ Bonne réponse ! " + item.explanation;
+  } else {
+    feedback.textContent =
+      "❌ Réponse incorrecte. La bonne réponse est : " +
+      item.options[item.answer] + ". " + item.explanation;
+  }
+  const nextButton = document.getElementById("nextQuestion");
+  nextButton.hidden = false;
+  nextButton.addEventListener("click", () => {
+    currentQuestion++;
+    showQuestion();
+  });}
  <script>
 const levelButtons = document.querySelectorAll(".level");
 const profileForm = document.getElementById("profileForm");
