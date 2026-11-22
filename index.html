@@ -1,74 +1,170 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123b70">
-  <meta name="description" content="GÉNIE SCOLAIRE RDC, jouer, apprendre et devenir meilleur !">
-  <title>GÉNIE SCOLAIRE RDC</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5fb;
-      color: #183153;
-    }
-    header {
-      background: #123b70;
-      color: white;
-      padding: 28px 18px;
-      text-align: center;
-    }
-    header h1 { margin: 0 0 10px; font-size: 25px; }
-    header p { margin: 0; }
-    main { padding: 20px; max-width: 850px; margin: auto; }
-    .welcome, .module {
-      background: white;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 3px 12px #18315312;
-    }
-    .modules {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-    }
-    .module { margin: 0; text-align: center; }
-    .module span { font-size: 30px; }
-    h2 { color: #123b70; }
-    footer {
-      text-align: center;
-      padding: 22px;
-      color: #63748a;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b70">
+<title>GÉNIE SCOLAIRE RDC</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f6fb;
+ color:#183153;
+}
+header{
+ background:linear-gradient(135deg,#102f59,#1e5b9c);
+ color:white;
+ padding:20px 15px;
+}
+.topbar{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ max-width:1050px;
+ margin:auto;
+}
+.flag{
+ width:48px;
+ height:34px;
+ flex-shrink:0;
+ border-radius:4px;
+ background:#007fff;
+ position:relative;
+ overflow:hidden;
+}
+.flag:before{
+ content:"";
+ position:absolute;
+ width:75px;
+ height:7px;
+ background:#f7d618;
+ transform:rotate(-35deg);
+ top:14px;
+ left:-12px;
+ box-shadow:0 0 0 3px #ce1021;
+}
+.flag:after{
+ content:"★";
+ color:#f7d618;
+ position:absolute;
+ top:0;
+ left:5px;
+}
+.coat{
+ width:48px;
+ height:48px;
+ object-fit:contain;
+ background:white;
+ border-radius:7px;
+ padding:3px;
+}
+.brand h1{font-size:19px;margin:0 0 5px}
+.brand p{font-size:11px;margin:0}
+.hero{
+ max-width:1050px;
+ margin:25px auto 0;
+}
+.hero h2{font-size:25px;margin:0 0 10px}
+.hero p{line-height:1.5;color:#e5efff}
+main{max-width:1050px;margin:auto;padding:18px}
+.panel{
+ background:white;
+ border-radius:15px;
+ padding:18px;
+ margin-bottom:18px;
+ box-shadow:0 4px 15px #17385c12;
+}
+.section-title{color:#123b70;font-size:20px}
+.levels{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+}
+.level{
+ border:2px solid #e1eaf5;
+ background:white;
+ border-radius:12px;
+ padding:15px 8px;
+ font-weight:bold;
+ color:#183153;
+}
+.level.selected{
+ border-color:#1d5ca5;
+ background:#f0f6ff;
+}
+.level span{display:block;font-size:28px;margin-bottom:7px}
+.level small{display:block;font-weight:normal;margin-top:5px}
+label{display:block;margin:13px 0 7px;font-weight:bold}
+input,select{
+ width:100%;
+ padding:12px;
+ border:1px solid #cad6e5;
+ border-radius:9px;
+ font-size:15px;
+ background:white;
+}
+.primary{
+ background:#123b70;
+ color:white;
+ border:0;
+ border-radius:9px;
+ padding:13px 18px;
+ margin-top:14px;
+ font-weight:bold;
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+}
+.tile{
+ background:white;
+ padding:17px 10px;
+ border-radius:13px;
+ text-align:center;
+ box-shadow:0 4px 12px #17385c0c;
+}
+.tile span{font-size:29px}
+.tile h3{font-size:15px}
+.tile p{font-size:12px;color:#65758b}
+.languages{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+}
+.lang{
+ background:#edf4fc;
+ padding:9px 12px;
+ border-radius:20px;
+ font-size:13px;
+}
+.notice{font-size:13px;color:#65758b;line-height:1.5}
+#profileStatus{color:#123b70;font-weight:bold}
+footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
+@media(max-width:520px){
+ .levels{grid-template-columns:1fr}
+ .level{text-align:left;display:flex;align-items:center;gap:12px}
+ .level span{margin:0}
+ .brand h1{font-size:16px}
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>🎓 GÉNIE SCOLAIRE RDC</h1>
-    <p>Jouer, apprendre et devenir meilleur !</p>
+<header>
+ <div class="topbar">
+  <div class="flag" aria-label="Drapeau de la RDC"></div>
+  <img class="coat"
+   src="https://commons.wikimedia.org/wiki/Special:FilePath/Coat%20of%20Arms%20Democratic%20Republic%20of%20Congo.png"
+   alt="Armoiries officielles de la RDC">
+  <div class="brand">
+   <h1>GÉNIE SCOLAIRE RDC</h1>
+   <p>Jouer, apprendre et devenir meilleur !</p>
+  </div>
+ </div>
+ <div class="hero">
+  <h2>Bienvenue dans ton espace d'apprentissage !</h2>
+  <p>Apprends, joue, relève des défis et développe tes connaissances avec une plateforme conçue pour les apprenants congolais.</p>
+ </div>
   </header>
-  <main>
-    <section class="welcome">
-      <h2>Bienvenue !</h2>
-      <p>Découvre une nouvelle façon d'apprendre grâce aux jeux, aux cours et aux défis éducatifs.</p>
-    </section>
-    <h2>Nos espaces éducatifs</h2>
-    <section class="modules">
-      <article class="module"><span>🎮</span><h3>Jeux éducatifs</h3></article>
-      <article class="module"><span>📚</span><h3>Cours et leçons</h3></article>
-      <article class="module"><span>🏆</span><h3>Défis et concours</h3></article>
-      <article class="module"><span>🌍</span><h3>Culture générale</h3></article>
-      <article class="module"><span>🗣️</span><h3>Langues</h3></article>
-      <article class="module"><span>⭐</span><h3>Récompenses</h3></article>
-    </section>
-    <section class="welcome">
-      <h2>Apprendre dans nos langues</h2>
-      <p>Français · English · Kiswahili · Lingala · Kikongo · Tshiluba</p>
-    </section>
-  </main>
-  <footer>© GÉNIE SCOLAIRE RDC</footer>
-</body>
-    </html>
