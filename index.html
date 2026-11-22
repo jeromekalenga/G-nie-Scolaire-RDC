@@ -314,7 +314,6 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
       explanation: "Le fleuve Congo est l'un des grands fleuves d'Afrique."
     }
   ],
-
   math: [
     {
       q: "Combien font 25 + 17 ?",
@@ -465,6 +464,10 @@ const classes = {
     "2e année licence",
      </script>
 <script>
+ document.getElementById("openGames").addEventListener("click", () => {
+  const zone = document.getElementById("gameZone");
+  zone.hidden = false;
+  zone.scrollIntoView({ behavior: "smooth" });});
 const levelButtons = document.querySelectorAll(".level");"1re année master",
     "2e année master",
     "Autre"
