@@ -168,3 +168,197 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
   <p>Apprends, joue, relève des défis et développe tes connaissances avec une plateforme conçue pour les apprenants congolais.</p>
  </div>
   </header>
+<main>
+<section class="panel">
+ <h2 class="section-title">Créer mon profil d'apprenant</h2>
+ <p class="notice">Choisis ton niveau scolaire pour personnaliser ton apprentissage.</p>
+ <div class="levels">
+  <button class="level" type="button" data-level="Primaire">
+   <span>🎒</span>
+   Primaire
+   <small>1re à 6e année</small>
+  </button>
+  <button class="level" type="button" data-level="Secondaire">
+   <span>📘</span>
+   Secondaire
+   <small>1re à 4e année</small>
+  </button>
+  <button class="level" type="button" data-level="Supérieur">
+   <span>🎓</span>
+   Enseignement supérieur
+   <small>Universités et instituts supérieurs</small>
+  </button>
+ </div>
+ <div id="profileForm" hidden>
+  <label for="learnerName">Prénom ou pseudonyme</label>
+  <input id="learnerName" maxlength="40" placeholder="Exemple : Grâce">
+  <label for="learnerClass">Classe ou année d'étude</label>
+  <select id="learnerClass">
+   <option value="">Choisir ma classe</option>
+  </select>
+  <label for="learnerLanguage">Langue d'apprentissage</label>
+  <select id="learnerLanguage">
+   <option>Français</option>
+   <option>English</option>
+   <option>Kiswahili</option>
+   <option>Lingala</option>
+   <option>Kikongo</option>
+   <option>Tshiluba</option>
+  </select>
+  <button class="primary" id="saveProfile" type="button">
+   Enregistrer mon profil
+  </button>
+ </div>
+ <p id="profileStatus" aria-live="polite"></p>
+</section>
+<h2 class="section-title">Les espaces éducatifs</h2>
+<section class="grid">
+ <article class="tile">
+  <span>🎮</span>
+  <h3>Jeux éducatifs</h3>
+  <p>Apprendre en jouant.</p>
+ </article>
+ <article class="tile">
+  <span>📚</span>
+  <h3>Cours et leçons</h3>
+  <p>Des cours adaptés à chaque niveau.</p>
+ </article>
+ <article class="tile">
+  <span>🏆</span>
+  <h3>Défis et concours</h3>
+  <p>Tester ses connaissances.</p>
+ </article>
+ <article class="tile">
+  <span>🧠</span>
+  <h3>Culture générale</h3>
+  <p>Découvrir la RDC et le monde.</p>
+ </article>
+ <article class="tile">
+  <span>🗣️</span>
+  <h3>Langues</h3>
+  <p>Apprendre dans six langues.</p>
+ </article>
+ <article class="tile">
+  <span>⭐</span>
+  <h3>Récompenses</h3>
+  <p>Valoriser ses progrès.</p>
+ </article>
+</section>
+<section class="panel" style="margin-top:18px">
+ <h2 class="section-title">Nos langues d'apprentissage</h2>
+ <div class="languages">
+  <span class="lang">🇫🇷 Français</span>
+  <span class="lang">🇬🇧 English</span>
+  <span class="lang">Kiswahili</span>
+  <span class="lang">Lingala</span>
+  <span class="lang">Kikongo</span>
+  <span class="lang">Tshiluba</span>
+ </div>
+</section>
+<p class="notice">
+ Version de démarrage : le profil sera enregistré sur cet appareil.
+ Les comptes en ligne et la synchronisation seront ajoutés ultérieurement.
+</p>
+</main>
+<footer>
+ © GÉNIE SCOLAIRE RDC — Une plateforme éducative pour tous les apprenants congolais.
+ </footer>
+ <script>
+const levelButtons = document.querySelectorAll(".level");
+const profileForm = document.getElementById("profileForm");
+const learnerClass = document.getElementById("learnerClass");
+const learnerName = document.getElementById("learnerName");
+const learnerLanguage = document.getElementById("learnerLanguage");
+const profileStatus = document.getElementById("profileStatus");
+const classes = {
+  "Primaire": [
+    "1re année primaire",
+    "2e année primaire",
+    "3e année primaire",
+    "4e année primaire",
+    "5e année primaire",
+    "6e année primaire"
+  ],
+  "Secondaire": [
+    "1re année secondaire",
+    "2e année secondaire",
+    "3e année secondaire",
+    "4e année secondaire"
+  ],
+  "Supérieur": [
+    "1re année graduat",
+    "2e année graduat",
+    "3e année graduat",
+    "1re année licence",
+    "2e année licence",
+    "1re année master",
+    "2e année master",
+    "Autre"
+  ]
+};
+let selectedLevel = "";
+levelButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    selectedLevel = button.dataset.level;
+    levelButtons.forEach(item => {
+      item.classList.remove("selected");
+    });
+    button.classList.add("selected");
+    profileForm.hidden = false;
+    learnerClass.innerHTML =
+      '<option value="">Choisir ma classe</option>';
+    classes[selectedLevel].forEach(item => {
+      const option = document.createElement("option");
+      option.value = item;
+      option.textContent = item;
+      learnerClass.appendChild(option);
+    });
+    profileStatus.textContent =
+      "Niveau sélectionné : " + selectedLevel;
+  });
+});
+document.getElementById("saveProfile").addEventListener("click", () => {
+  const name = learnerName.value.trim();
+  const schoolClass = learnerClass.value;
+  const language = learnerLanguage.value;
+  if (!selectedLevel) {
+    profileStatus.textContent = "Choisis d'abord ton niveau scolaire.";
+    return;
+  }
+  if (!name || !schoolClass || !language) {
+    profileStatus.textContent =
+      "Complète ton prénom, ta classe et ta langue.";
+    return;
+  }
+  const profile = {
+    name: name,
+    level: selectedLevel,
+    schoolClass: schoolClass,
+    language: language
+  };
+
+  try {
+    localStorage.setItem(
+      "genieScolaireProfile",
+      JSON.stringify(profile)
+    );
+    profileStatus.textContent =
+      "Bravo " + name + " ! Ton profil a été enregistré sur cet appareil.";
+  } catch (error) {
+    profileStatus.textContent =
+      "Impossible d'enregistrer le profil sur cet appareil.";
+  }
+});
+try {
+  const savedProfile = localStorage.getItem("genieScolaireProfile");
+  if (savedProfile) {
+    const profile = JSON.parse(savedProfile);
+    profileStatus.textContent =
+      "Profil enregistré : " + profile.name +
+      " — " + profile.level +
+      " — " + profile.schoolClass;}
+} catch (error) {
+  profileStatus.textContent = "";}
+</script>
+</body>
+</html>
