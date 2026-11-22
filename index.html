@@ -292,6 +292,7 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
 <footer>
  © GÉNIE SCOLAIRE RDC — Une plateforme éducative pour tous les apprenants congolais.
  </footer>
+ <script>
  const gameQuestions = {
   rdc: [
     {
@@ -334,7 +335,6 @@ footer{text-align:center;padding:20px;color:#65758b;font-size:12px}
       explanation: "100 − 35 = 65."
     }
   ],
-
   french: [
     {
       q: "Quel est le pluriel de « cheval » ?",
@@ -437,7 +437,7 @@ function checkAnswer(selected) {
   nextButton.addEventListener("click", () => {
     currentQuestion++;
     showQuestion();});}
- <script>
+ </script>
 const levelButtons = document.querySelectorAll(".level");
 const profileForm = document.getElementById("profileForm");
 const learnerClass = document.getElementById("learnerClass");
